@@ -1,19 +1,20 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+import os
 
 
-MYSQL_USER = "root"
-MYSQL_PASSWORD = "12345678"
-MYSQL_HOST = "localhost"
-MYSQL_PORT = "3306"
-MYSQL_DATABASE = "fastapi_db"
+MYSQL_USER = os.getenv("MYSQL_USER" , "root")
+MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD" , "12345678")
+MYSQL_HOST = os.getenv("MYSQL_HOST" , "db")
+MYSQL_PORT = os.getenv("MYSQL_PORT" , "3306")
+MYSQL_DATABASE = os.getenv("MYSQL_DB" , "fastapi_db")
 
 DATABASE_URL = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
 
 
 #connection
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, echo=True , pool_pre_ping=True)
 
 #session
 SessionLocal = sessionmaker(autocommit=False , autoflush=False, bind=engine)
